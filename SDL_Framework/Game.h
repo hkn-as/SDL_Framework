@@ -3,6 +3,7 @@
 class Game
 {
 private:
+	Game();
 	bool m_running;
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
@@ -16,7 +17,7 @@ private:
 	static const int kRectangleSpeed = 700;
 	
 public:
-	Game();
+	static Game& getInstance();
 	int Init(const char* title, int x, int y);
 	void HandleEvents();
 	bool IsKeyDown(SDL_Scancode key);

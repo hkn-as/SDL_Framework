@@ -13,6 +13,12 @@ Game::Game() : m_running(false)
 {
 	cout << "Inside the constructor" << endl;
 }
+Game& Game::getInstance()
+{
+	static Game* instance = new Game();
+	return *instance;
+}
+
 
 int Game::Init(const char* title, int x, int y)
 {
