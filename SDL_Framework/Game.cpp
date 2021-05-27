@@ -1,10 +1,15 @@
 #include "Game.h"
 #include  <iostream>
+
 using namespace std;
 
 Game::Game() : m_running(false)
 			 , m_pWindow(nullptr)
 			 , m_pRenderer(nullptr)
+			 , m_rectangleTransform{kWidth/2, kHeight/2, 100, 100}
+			 , m_pKeyStates(nullptr)
+			 , m_timePassed(0)
+			 , m_speedMultiplier(1)
 {
 	cout << "Inside the constructor" << endl;
 }
@@ -51,6 +56,8 @@ int Game::Init(const char* title, int x, int y)
 	}
 
 	cout << "Initialization successful!" << endl;
+
+	m_pKeyStates = SDL_GetKeyboardState((nullptr));
 	
 	m_running = true;
 	return 0;
@@ -70,11 +77,36 @@ void Game::HandleEvents()
 	}
 
 }
-void Game::Update()
+
+bool Game::IsKeyDown(SDL_Scancode key)
 {
+	if(m_pKeyStates)
+	{
+		return m_pKeyStates[key] == 1;
+	}
+	return false;
+}
+
+
+void Game::Update(float deltaTime)
+{
+	/*m_timePassed += deltaTime;
+	if(m_timePassed > 2)
+	{
+		m_speedMultiplier = 2;
+		m_timePassed = 0;
+	}*/
 	
-	
-	cout << "Inside Update ..." << endl;
+	if (IsKeyDown(SDL_SCANCODE_W))
+		m_rectangleTransform.y -= kRectangleSpeed * deltaTime;
+	if (IsKeyDown(SDL_SCANCODE_S))
+		m_rectangleTransform.y += kRectangleSpeed * deltaTime;
+	if (IsKeyDown(SDL_SCANCODE_A))
+		m_rectangleTransform.x -= kRectangleSpeed * deltaTime;
+	if (IsKeyDown(SDL_SCANCODE_D))
+		m_rectangleTransform.x += kRectangleSpeed * deltaTime;
+	//if (IsKeyDown(SDL_SCANCODE_SPACE))
+		//m_rectangleTransform.y -= 5;
 
 	
 }
@@ -83,9 +115,12 @@ void Game::Render()
 	SDL_SetRenderDrawColor(m_pRenderer, 0, 128, 255, 255);
 	SDL_RenderClear(m_pRenderer);
 
+	SDL_SetRenderDrawColor(m_pRenderer, 255, 128, 64, 255);
+	SDL_RenderFillRectF(m_pRenderer, &m_rectangleTransform);
+	
 	SDL_RenderPresent(m_pRenderer);
 	
-	cout << "Inside Render.. " << endl;
+	
 }
 void Game::Clean()
 {

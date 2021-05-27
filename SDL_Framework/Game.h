@@ -6,16 +6,21 @@ private:
 	bool m_running;
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
-
+	SDL_FRect m_rectangleTransform;
+	const Uint8* m_pKeyStates;
+	float m_timePassed;
+	float m_speedMultiplier;
 private:
 	static const int kWidth = 1024;
 	static const int kHeight = 768;
-
+	static const int kRectangleSpeed = 700;
+	
 public:
 	Game();
 	int Init(const char* title, int x, int y);
 	void HandleEvents();
-	void Update();
+	bool IsKeyDown(SDL_Scancode key);
+	void Update(float deltaTiime);
 	void Render();
 	void Clean();
 	
